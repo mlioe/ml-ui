@@ -1,5 +1,5 @@
 import Button from './button'
-import './icon/iconfont.css'
+import './fonts/iconfont.css'
 
 const components = [
   Button
