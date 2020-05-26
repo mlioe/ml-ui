@@ -14,24 +14,24 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+/* 加载 */
 .icon-loading:before {
   content: "\e891";
 }
-
-.icon-dianying1:before {
+/* 电影 */
+.icon-movie:before {
   content: "\e933";
 }
-
-.icon-youhuiquan1:before {
+/* 优惠券 */
+.icon-coupon:before {
   content: "\e934";
 }
-
+/* 热门 */
 .icon-remen:before {
   content: "\e935";
 }
-
-.icon-chuangzuo1:before {
+/* 创作 */
+.icon-chuangzuo:before {
   content: "\e936";
 }
 

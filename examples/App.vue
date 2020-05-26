@@ -1,73 +1,47 @@
 <template>
   <div id="app">
-	  <div class="bt-box">
-	  	<ml-button circle >圆形</ml-button>
-	  	<ml-button circle  type="primary">1</ml-button>
-	  	<ml-button circle  type="success">1</ml-button>
-	  	<ml-button circle  type="info">1</ml-button>
-	  	<ml-button circle  type="warning">1</ml-button>
-	  	<ml-button circle  type="danger">1</ml-button>
-	  </div>
-    <div class="bt-box">
-		<ml-button>普通按钮</ml-button>
-		<ml-button type="primary">primary</ml-button>
-		<ml-button type="success">success</ml-button>
-		<ml-button type="info">info</ml-button>
-		<ml-button type="warning">warning</ml-button>
-		<ml-button type="danger">danger</ml-button>
-	</div>
-	<div class="bt-box">
-		<ml-button plain>朴素按钮</ml-button>
-		<ml-button plain type="primary">primary</ml-button>
-		<ml-button plain type="success">success</ml-button>
-		<ml-button plain type="warning">warning</ml-button>
-		<ml-button plain type="info">info</ml-button>
-		<ml-button plain type="danger">danger</ml-button>
-	</div>
-	<div class="bt-box">
-		<ml-button plain round>圆角</ml-button>
-		<ml-button plain round type="primary">primary</ml-button>
-		<ml-button plain round type="success">success</ml-button>
-		<ml-button plain round type="warning">warning</ml-button>
-		<ml-button plain round type="info">info</ml-button>
-		<ml-button plain round type="danger">danger</ml-button>
-	</div>
-	<div class="bt-box">
-		<ml-button  round disabled>普通禁用按钮</ml-button>
-		<ml-button  round disabled type="primary">primary</ml-button>
-		<ml-button  round disabled type="success">success</ml-button>
-		<ml-button  round disabled type="info">info</ml-button>
-		<ml-button  round disabled type="warning">warning</ml-button>
-		<ml-button  round disabled type="danger">danger</ml-button>
-	</div>
-	<div class="bt-box">
-		<ml-button plain round disabled>普通禁用按钮</ml-button>
-		<ml-button plain round disabled type="primary">primary</ml-button>
-		<ml-button plain round disabled type="success">success</ml-button>
-		<ml-button plain round disabled type="info">info</ml-button>
-		<ml-button plain round disabled type="warning">warning</ml-button>
-		<ml-button plain round disabled type="danger">danger</ml-button>
-	</div>
-	<div class="bt-box">
-		<ml-button icon="icon-icon-test9">带图标的按钮</ml-button>
-		<ml-button circle icon="icon-icon-test9" @click="click"></ml-button>
-		<ml-button type="primary"  :loading="true">加载中</ml-button>
-	</div>
+	<!-- 普通的 -->
+	<!-- <ml-dialog :visible="true" :title="title">12</ml-dialog> -->
+	<!-- 自定义标题 -->
+	<!-- <ml-dialog :visible="true" >
+		<template v-slot:title>
+			<h3>12</h3>
+		</template>
+	</ml-dialog> -->
+	<!-- 自定义框，距离顶部的距离 -->
+	<!-- <ml-dialog :visible="true" width="20%" top="300px">neirong</ml-dialog> -->
+	<!-- 管理底部按钮 -->
+	<!-- <ml-dialog :visible="true" :title="title">
+		<template v-slot:footer>
+			<ml-button>自定义</ml-button>
+		</template>
+	</ml-dialog> -->
+	<!-- 取消底部按钮 -->
+	<!-- 关闭取消按钮 -->
+	<!-- <ml-dialog :visible="true" :showClose="false">12</ml-dialog> -->
+	<!-- 关闭确认按钮 -->
+	<button @click="visible = !visible">按钮</button>
+	<ml-dialog :visible.sync="visible" :showConfirm="false">12</ml-dialog>
   </div>
 </template>
 
 <script>
 
 export default {
+	data(){
+		return{
+			title:'123',
+			visible:false
+		}
+	},
 	methods:{
-		click(e){
-			// console.log(e)
+		close(e){
+			this.visible = e
 		}
 	}
 }
 </script>
 
 <style lang="scss">
-	.bt-box{margin-bottom: 20px;}
-	.ml-button{margin-right: 20px;}
+	
 </style>
