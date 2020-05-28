@@ -1,8 +1,12 @@
 <template>
   <div id="app">
-	
-	<ml-input v-model="value" placeholder="请输入你XX" type="text" name="inp"></ml-input>
-  </div>
+	<div class="iconList">
+		<div class="list" v-for="item in data">
+			<i :class="item"></i>
+			<div class="text">{{item}}</div>
+		</div>
+	</div>
+  </div/>
 </template>
 
 
@@ -20,7 +24,24 @@
 export default {
 	data(){
 		return{
-			value:"你好"
+			data:['icon-loading','icon-movie','icon-coupon','icon-remen','icon-chuangzuo','icon-component','icon-code',
+			'icon-rising',
+			'icon-exchangerate',
+			"con-add-select",
+			"icon-sami-select",
+			"icon-jianshezhong",
+			'icon-view-off',
+			"icon-view",
+			"icon-time",
+			"icon-edit",
+			"icon-link",
+			"icon-setting",
+			"icon-upload",
+			"icon-download",
+			"icon-play",
+			"icon-region",
+			"icon-list"
+			]
 		}
 	},
 	methods:{
@@ -32,5 +53,9 @@ export default {
 </script>
 
 <style lang="scss">
-	
+	#app{width: 80%;margin: 0 auto;}
+	.iconList{width: 100%;display: flex;align-items: center;flex-wrap: wrap;}
+	.iconList .list{width: 20%;display: flex;align-items: center;flex-direction: column;margin: 10px 0;}
+	.iconList .list i{font-size: 50px;}
+	.iconList .list .text{font-size: 16px;padding: 20px 0;}
 </style>
