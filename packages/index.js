@@ -1,10 +1,11 @@
 import Button from './button/button.vue'
 import ButtonGroup from './button/button-group.vue'
-import mlDialog from './dialog/dialog.vue'
+import Dialog from './dialog/dialog.vue'
+import Input from './input/input.vue'
 import './fonts/iconfont.css'
 
 const components = [
-  Button,ButtonGroup,mlDialog
+  Button,ButtonGroup,Dialog,Input
 ]
 
 const install = function (Vue) {
