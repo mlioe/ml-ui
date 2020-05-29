@@ -199,7 +199,7 @@
   content: "\e668";
 }
 /* social-google */
-.icon-icon-test34:before {
+.icon-social-google:before {
   content: "\e669";
 }
 /* social-naver */
@@ -207,7 +207,7 @@
   content: "\e66a";
 }
 /* social-stackflow */
-.icon-icon-test36:before {
+.icon-social-stackflow:before {
   content: "\e66b";
 }
 /* social-youtube */
@@ -265,9 +265,6 @@ social_server_fault */
   content: "\e677";
 }
 
-.icon-icon-test46:before {
-  content: "\e678";
-}
 
 .icon-aixin:before {
   content: "\e8ab";
@@ -325,7 +322,7 @@ social_server_fault */
   content: "\e8b8";
 }
 
-.icon-diantong_guan:before {
+.icon-diantong-guan:before {
   content: "\e8b9";
 }
 
