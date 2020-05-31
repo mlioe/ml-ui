@@ -2,10 +2,13 @@ import Button from './button/button.vue'
 import ButtonGroup from './button/button-group.vue'
 import Dialog from './dialog/dialog.vue'
 import Input from './input/input.vue'
+import Switch from './switch/switch.vue' 
+import Radio from './radio/radio.vue' 
+import RadioGroup from './radio/radio-group.vue' 
 import './fonts/iconfont.css'
 
 const components = [
-  Button,ButtonGroup,Dialog,Input
+  Button,ButtonGroup,Dialog,Input,Switch,Radio,RadioGroup
 ]
 
 const install = function (Vue) {

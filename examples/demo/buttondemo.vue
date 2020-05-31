@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-	  <div class="bt-box">
+	  <div class="bt-box" style="margin-top: 20px;">
 	  	<ml-button circle >圆形</ml-button>
 	  	<ml-button circle  type="primary">1</ml-button>
 	  	<ml-button circle  type="success">1</ml-button>
@@ -73,6 +73,6 @@ export default {
 </script>
 
 <style lang="scss">
-	.bt-box{margin-bottom: 20px;}
+	.bt-box{margin-top: 20px;}
 	.bt-box .ml-button{margin-right: 20px;}
 </style>
