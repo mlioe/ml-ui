@@ -7,12 +7,16 @@ import Radio from './radio/radio.vue'
 import RadioGroup from './radio/radio-group.vue' 
 import Checkbox from './checkbox/checkbox.vue'
 import CheckboxGroup from './checkbox/checkboxGroup.vue'
+import Vue from 'vue'
 import Form from './form/form.vue'
 import FormItem from './form/formItem.vue'
+import Toast from './toast/toast.vue'
+import ToastIndex from './toast/index.js'
+Vue.use(ToastIndex)
 import './fonts/iconfont.css'
 
 const components = [
-  Button,ButtonGroup,Dialog,Input,Switch,Radio,RadioGroup,Checkbox,CheckboxGroup,Form,FormItem
+  Button,ButtonGroup,Dialog,Input,Switch,Radio,RadioGroup,Checkbox,CheckboxGroup,Form,FormItem,Toast
 ]
 
 const install = function (Vue) {

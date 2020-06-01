@@ -1,16 +1,8 @@
 <template>
 	<div>
-		<ml-form :model="model" label-width="80px">
-			<ml-form-item label="用户名">
-				<ml-input placeholder="请输入名字" style="width: 200px;"></ml-input>
-			</ml-form-item>
-			<ml-form-item label="显示资料">
-				<ml-switch v-model="value" :value.sync="value"></ml-switch>
-			</ml-form-item>
-			<ml-form-item>
-				<ml-button type="primary" @click="go">立即创建</ml-button>
-			</ml-form-item>
-		</ml-form>
+		<ml-toast :visible.sync="type" :position="position" :type="success">{{position}}</ml-toast>
+		<ml-button @click="a">点击</ml-button>
+		<ml-button @click="b">函数调用</ml-button>
 	</div>
 </template>
 
@@ -18,15 +10,22 @@
 	export default{
 		data(){
 			return{
-				model:{
-					gender:0,
-				},
-				value:false
+				type:false,
+				position:'center',
+				success:'success'
 			}
 		},
 		methods:{
-			go(){
-				console.log(this.value)
+			a(){
+				this.type = !this.type
+			},
+			b(){
+				this.$toast({
+					message:'你好',
+					position:this.position,
+					type:this.success,
+					duration:1000
+				})
 			}
 		}
 	}
