@@ -43,7 +43,8 @@
 		},
 		methods: {
 			handleClick(){
-				this.$emit('input',!this.value)
+				let val = !this.value
+				this.$emit('input',val)
 			},
 			setBgColor(){
 				if(this.activeColor || this.inactiveColor){

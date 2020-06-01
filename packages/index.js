@@ -5,10 +5,14 @@ import Input from './input/input.vue'
 import Switch from './switch/switch.vue' 
 import Radio from './radio/radio.vue' 
 import RadioGroup from './radio/radio-group.vue' 
+import Checkbox from './checkbox/checkbox.vue'
+import CheckboxGroup from './checkbox/checkboxGroup.vue'
+import Form from './form/form.vue'
+import FormItem from './form/formItem.vue'
 import './fonts/iconfont.css'
 
 const components = [
-  Button,ButtonGroup,Dialog,Input,Switch,Radio,RadioGroup
+  Button,ButtonGroup,Dialog,Input,Switch,Radio,RadioGroup,Checkbox,CheckboxGroup,Form,FormItem
 ]
 
 const install = function (Vue) {
