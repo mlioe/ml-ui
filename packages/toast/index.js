@@ -5,12 +5,12 @@ let currentToast;
 
 export default{
 	install(Vue,options){
-		Vue.prototype.$toast = function(message,position,type="info",duration=3000){
+		Vue.prototype.$toast = function(message){
 			if(currentToast){
 				currentToast.close()
 			}
 			currentToast = createToast({
-				Vue,message,propsData: position, onClose: () => {
+				Vue,message, onClose: () => {
 				  currentToast = null
 				}
 			})
@@ -21,39 +21,49 @@ export default{
 function createToast({ Vue, message, propsData, onClose }) {
   let Constructor = Vue.extend(Toast);
   //实例化构造器tosat对象
-  let toast = new Constructor({ propsData, });
+  let toast = new Constructor({  });
   //添加
   toast.$mount();
   //注册事件
   toast.$on('close', onClose)
   //挂到DOM
-  console.log(message)
-  toast.position = message.position
+  // console.log(message)
+  let toastMessage = {
+	  message:message.message,
+	  position : typeof message.position == 'undefined' ? 'top':message.position,
+	  type : typeof message.type == 'undefined' ? 'info' : message.type,
+	  duration : typeof message.duration == 'undefined' ? 3000 : message.duration
+  }
+  //提示组件位置
+  toast.position = toastMessage.position
 
   document.body.appendChild(toast.$el)
   
   //组件props的值
+  //组件出现
   toast.visible = true
-	
-  if(message.type == 'info'){
+  //设置组件的样式
+  if(toastMessage.type == 'info'){
   	toast.iconType = 'info'
   	toast.toastType = 'info'
   }
-  if(message.type == 'success'){
+  if(toastMessage.type == 'success'){
   	toast.iconType = 'chenggong'
   	toast.toastType = 'success'
   }
-  if(message.type == 'waring'){
+  if(toastMessage.type == 'waring'){
   	toast.iconType = 'info'
   	toast.toastType = 'waring'
   }
-  if(message.type == 'error'){
+  if(toastMessage.type == 'error'){
   	toast.iconType = 'shibai'
   	toast.toastType = 'error'
   }
-  toast.message = message.message
+  //组件的值
+  toast.message = toastMessage.message
+  //默认3秒，关闭组件
   setTimeout(()=>{
 	  toast.visible = false
-  },message.duration)
+  },toastMessage.duration)
   return toast;
 }

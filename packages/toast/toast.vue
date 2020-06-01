@@ -51,7 +51,6 @@
 			}
 		},
 		created() {
-			console.log(this.type)
 			if(this.type == 'info'){
 				this.iconType = 'info'
 				this.toastType = 'info'
