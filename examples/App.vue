@@ -5,7 +5,7 @@
 				<ml-input placeholder="请输入名字" style="width: 200px;"></ml-input>
 			</ml-form-item>
 			<ml-form-item label="显示资料">
-				<ml-switch v-model="value"></ml-switch>
+				<ml-switch v-model="value" :value.sync="value"></ml-switch>
 			</ml-form-item>
 			<ml-form-item>
 				<ml-button type="primary" @click="go">立即创建</ml-button>
@@ -20,14 +20,13 @@
 			return{
 				model:{
 					gender:0,
-					value:false
 				},
 				value:false
 			}
 		},
 		methods:{
 			go(){
-				console.log(this.model)
+				console.log(this.value)
 			}
 		}
 	}

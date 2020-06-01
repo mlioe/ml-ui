@@ -45,6 +45,7 @@
 			handleClick(){
 				let val = !this.value
 				this.$emit('input',val)
+				this.$emit('update:value',val)
 			},
 			setBgColor(){
 				if(this.activeColor || this.inactiveColor){
