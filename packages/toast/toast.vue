@@ -77,7 +77,7 @@
 			setTimer(){
 				setTimeout(()=>{
 					this.$emit('update:visible',false)
-				},3000)
+				},this.duration)
 			},
 			 close() {
 			      this.$el.remove()
