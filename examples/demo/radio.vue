@@ -1,10 +1,5 @@
 <template>
-	<div>
-		<!-- <ml-radio label="1" v-model="gender">男</ml-radio>
-		<ml-radio label="0"  v-model="gender">女</ml-radio>
-		
-		<ml-radio label="1" v-model="gender"></ml-radio>
-		<ml-radio label="0"  v-model="gender"></ml-radio> -->
+	<div style="margin-top: 30px;">
 		
 		<ml-radio-group v-model="gender2">
 			<ml-radio label="1"></ml-radio>

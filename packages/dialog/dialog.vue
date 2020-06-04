@@ -13,12 +13,12 @@
 					</button>
 				</div>
 				<div class="ml-dialog__body">
-					<span>哈哈哈</span>
+					<slot></slot>
 				</div>
 				<div class="ml-dialog__footer">
 					<div v-if="!$slots.footer">
 						<ml-button v-if="showClose" @click="handleClose">取消</ml-button>
-						<ml-button v-if="showConfirm" type="primary">确定</ml-button>
+						<ml-button v-if="showConfirm" type="primary" @click="handleBtn">确定</ml-button>
 					</div>
 					<slot name="footer" v-if="$slots.footer"></slot>
 				</div>
@@ -66,7 +66,10 @@
 			    },
 			    afterLeave () {//开启事件
 			      this.$emit('closed')
-			    }
+			    },
+			handleBtn(){
+				this.$emit('handleBtn')
+			}
 		}
 	}
 </script>

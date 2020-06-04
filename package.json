@@ -1,6 +1,6 @@
 {
   "name": "mlioe-ui",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "private": false,
   "main":"dist/mlioe-ui.umd.min.js",
   "author":{
