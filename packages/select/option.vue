@@ -1,15 +1,16 @@
 <template>
-	<li  @click="selecteItem" :style="label == selectValue  ? 'color:#66b1ff;font-weight: 700;':''">
+	<li  @click="selecteItem" :style="label == selectValue  ? 'color:#66b1ff;font-weight: 700;':''" v-show="show">
 		{{label}}
 	</li>
 </template>
 
 <script>
 	export default{
-		name:'ml-option',
+		name:'mlOption',
 		data(){
 			return{
 				selectValue:'',
+				show:true
 			}
 		},
 		props:{
@@ -34,13 +35,10 @@
 			// console.log(this)
 			// console.log(this.eventBus)
 			// console.log(this.select.value)
-			this.selectValue = this.select.value
+			this.selectValue = this.select.value 
 		},
 		computed: {
-		    propsData () { 
-				console.log(this.select.value )
-				return this.select.value 
-			}
+		   
 		},
 		methods:{
 			selecteItem(){

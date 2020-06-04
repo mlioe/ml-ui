@@ -1,10 +1,11 @@
 <template>
 	<div class="ml-select-box">
 		<div @click="wrapperType = !wrapperType">
-			<ml-input class="ml-input" readonly style="cursor: pointer;" v-model="selectedValue">
+			<ml-input class="ml-input" :readonly="!readonly" style="cursor: pointer;" v-model="selectedValue" :placeholder="placeholder" @input="searchChange">
 				
 			</ml-input>
 		</div>
+		<i class="icon-arrow-up" :class="{'flip':wrapperType}"></i>
 		<div class="ml-option-wrapper" v-show="wrapperType">
 			<ul>
 				<slot></slot>
@@ -20,19 +21,36 @@
 		components: { mlInput },
 		props:{
 			value:'',
+			placeholder:{
+				type:String,
+				default:''
+			},
+			readonly:{
+				type:Boolean,
+				default:false
+			}
 		},
 		data(){
 			return{
 				wrapperType:false,
 				eventBus: new Vue(),
-				selectedValue:''
+				selectedValue:'',
+				children:null
 			}
 		},
 		created() {
 			this.selectedValue = this.value
 		},
 		methods:{
-			
+			searchChange(e){
+				this.children.forEach((item,index)=>{
+					if(item.label.indexOf(e)!=-1){
+						item.show = true
+					}else{
+						item.show = false
+					}
+				})
+			}
 		},
 		computed:{
 			
@@ -46,10 +64,14 @@
 				this.$emit('change',{label:row.label,value:row.value})
 				this.wrapperType = !this.wrapperType
 				this.$children.filter(vm=>{
-					vm.selectValue = vm.selectValue ?  row.label : ''
+					if(typeof vm.selectValue != 'undefined'){
+						vm.selectValue =  row.label
+					}
 				})
 		    })
-			
+			this.children = this.$children.filter(
+			      (vm) => vm.$options.name === 'mlOption'
+			)
 		  },
 		name:'mlSelect',
 		provide() {
@@ -67,7 +89,11 @@
 		position: relative;
 		
 	}
-	.ml-input{width: 100%;}
+	.ml-input{width: 100%;padding-right: 20px;}
+	.icon-arrow-up{position: absolute;right: 4px;top: 0;display: inline-block;height: 100%;line-height: 34px;transition: 0.2s;}
+	.flip {
+	      transform: rotate(180deg);
+	}
 	.ml-option-wrapper{
 		z-index: 9;
 		box-sizing: border-box;
@@ -90,7 +116,7 @@
 			overflow-y: auto;
 			padding: 0;
 			margin: 0;
-			scrollbar-width: none; /* firefox */
+			scrollbar-color: #eeeeef transparent;
 			  -ms-overflow-style: none; /* IE 10+ */
 			li {
 			    width: 100%;
@@ -105,8 +131,27 @@
 			    }
 			}
 		}
-		ul::-webkit-scrollbar {
-		        display: none;
+		// ul::-webkit-scrollbar {
+		//         display: none;
+		// }
+		ul::-webkit-scrollbar{
+			width: 4px;
 		}
+		ul::-webkit-scrollbar-thumb{
+			border-radius: 5px;
+			background-color: #eeeeef;
+		}
+		ul::-moz-scrollbar{
+			width: 4px;
+		}
+		ul::-moz-scrollbar-thumb{
+			border-radius: 5px;
+			background-color: #eeeeef;
+		}
+		// ul::-webkit-scrollbar-track{
+		// 	box-shadow: inset 0 0  5px rgba(0,0,0,0.5);
+		// 	border-radius: 0;
+		// 	background-color: rgba(0,0,0,0.1);
+		// }
 	}
 </style>
