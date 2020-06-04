@@ -1,12 +1,16 @@
 <template>
 	
 	<div>
-		<ml-select v-model="value" @change="change">
-			<ml-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+		<!-- 不可输入 -->
+		<!-- <ml-select v-model="value" @change="change" placeholder="请选择">
+			<ml-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" >
+			</ml-option>
+		</ml-select> -->
+		<!-- 可输入 -->
+		<ml-select v-model="value" @change="change" placeholder="请选择" readonly>
+			<ml-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" >
 			</ml-option>
 		</ml-select>
-		
-		
 	</div>
 </template>
 
@@ -32,7 +36,7 @@
 				          value: '选项5',
 				          label: '北京烤鸭'
 				        }],
-				value: '黄金糕',
+				value: '',
 			}
 		},
 		created() {
