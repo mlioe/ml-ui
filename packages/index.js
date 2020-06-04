@@ -12,11 +12,13 @@ import Form from './form/form.vue'
 import FormItem from './form/formItem.vue'
 import Toast from './toast/toast.vue'
 import ToastIndex from './toast/index.js'
+import Select from './select/select.vue'
+import Option from './select/option.vue'
 Vue.use(ToastIndex)
 import './fonts/iconfont.css'
 
 const components = [
-  Button,ButtonGroup,Dialog,Input,Switch,Radio,RadioGroup,Checkbox,CheckboxGroup,Form,FormItem,Toast
+  Button,ButtonGroup,Dialog,Input,Switch,Radio,RadioGroup,Checkbox,CheckboxGroup,Form,FormItem,Toast,Select,Option
 ]
 
 const install = function (Vue) {

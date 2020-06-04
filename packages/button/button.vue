@@ -1,5 +1,6 @@
 <template>
-	<button class="ml-button" 
+	<button 
+		class="ml-button" 
 		:class="[
 			`ml-button--${type}`,
 			{'is-plain':plain},
@@ -8,7 +9,8 @@
 			{'is-circle': circle}
 		]"
 		@click="click"
-		:disabled="disabled">
+		:disabled="disabled"
+		>
 		<i v-if="loading" class="icon-loading icon-loading-animation"></i>
 		<i v-if="icon" :class="icon"></i>
 		<!-- 没有内容要隐藏 -->

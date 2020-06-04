@@ -7,6 +7,8 @@
 		 :name="name" :disabled="disabled"
 		 :value="value"
 		 @input="handelInput"
+		 :readonly="readonly"
+		 :style="readonly ?'cursor: pointer':''"
 		 >
 		 <span class="ml-input__suffix" v-if="showSuffix">
 			 <i class="icon-shibai" v-if="clearable && value" @click="clear"></i>
@@ -52,6 +54,10 @@
 				type:Boolean,
 				default:false
 			},
+			readonly:{
+				type:Boolean,
+				default:false
+			}
 		},
 		computed:{
 			showSuffix(){
