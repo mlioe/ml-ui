@@ -1,10 +1,12 @@
 <template>
 	
 	<div>
-		<ml-select v-model="value">
+		<ml-select v-model="value" @change="change">
 			<ml-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 			</ml-option>
 		</ml-select>
+		
+		
 	</div>
 </template>
 
@@ -34,12 +36,17 @@
 			}
 		},
 		created() {
-			setTimeout(()=>{
-				this.value2 = '------'
-			},2000)
+			
 		},
 		methods:{
-			
+			change(e){
+				// console.log(e)
+				// this.value = e.label
+				console.log(this.value)
+			},
+			alert(e){
+				console.log(e)
+			}
 		}
 	}
 </script>

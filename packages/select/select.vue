@@ -1,16 +1,15 @@
 <template>
 	<div class="ml-select-box">
 		<div @click="wrapperType = !wrapperType">
-			<ml-input class="ml-input" readonly style="cursor: pointer;" v-model="value">
+			<ml-input class="ml-input" readonly style="cursor: pointer;" v-model="selectedValue">
 				
 			</ml-input>
 		</div>
-		<div class="ml-option-wrapper" v-show="wrapperType" @selectedValue="selectedValue">
+		<div class="ml-option-wrapper" v-show="wrapperType">
 			<ul>
 				<slot></slot>
 			</ul>
 		</div>
-		
 	</div>
 </template>
 
@@ -25,23 +24,32 @@
 		data(){
 			return{
 				wrapperType:false,
-				 eventBus: new Vue(),
+				eventBus: new Vue(),
+				selectedValue:''
 			}
 		},
 		created() {
+			this.selectedValue = this.value
 		},
 		methods:{
-			selectedValue(e){
-			}
+			
+		},
+		computed:{
+			
 		},
 		mounted() {
 		    this.eventBus.$on('update:selectedValue', (row) => {
 				// this.label = row.value
 				// this.value = row.label
-				this.value = '123'
-				// this.$emit('update:input', this.label)
+				this.selectedValue = row.label
+				this.$emit('input', row.label)
+				this.$emit('change',{label:row.label,value:row.value})
+				this.wrapperType = !this.wrapperType
+				this.$children.filter(vm=>{
+					vm.selectValue = vm.selectValue ?  row.label : ''
+				})
 		    })
-		   
+			
 		  },
 		name:'mlSelect',
 		provide() {

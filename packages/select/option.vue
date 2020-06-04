@@ -25,15 +25,22 @@
 		methods:{
 			
 		},
-		inject:{
-			eventBus:{default:''},
-			select:{default:''}
-		},
+		// inject:{
+		// 	eventBus:{default:''},
+		// 	select:{default:''}
+		// },
+		inject:['eventBus','select'],
 		created() {
 			// console.log(this)
 			// console.log(this.eventBus)
 			// console.log(this.select.value)
 			this.selectValue = this.select.value
+		},
+		computed: {
+		    propsData () { 
+				console.log(this.select.value )
+				return this.select.value 
+			}
 		},
 		methods:{
 			selecteItem(){
@@ -42,6 +49,9 @@
 				        label: this.label,
 				})
 			}
+		},
+		watch:{
+			
 		}
 	}
 </script>
