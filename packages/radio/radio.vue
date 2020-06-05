@@ -42,6 +42,7 @@
 			        this.$emit('input', value)
 			        // this.$refs.radio.checked = this.label === this.model
 					this.isGroup ? this.RadioGroup.$emit('input',value):this.$emit('input',value)
+					this.isGroup ? this.RadioGroup.$emit('change',value):this.$emit('change',value)
 			      }
 			},
 			isGroup(){

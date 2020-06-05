@@ -1,16 +1,15 @@
 <template>
-	
-	<div>
-		<!-- 不可输入 -->
-		<!-- <ml-select v-model="value" @change="change" placeholder="请选择">
-			<ml-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" >
-			</ml-option>
-		</ml-select> -->
-		<!-- 可输入 -->
-		<ml-select v-model="value" @change="change" placeholder="请选择" readonly>
-			<ml-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" >
-			</ml-option>
-		</ml-select>
+	<div style="margin-top: 30px;">
+		
+		<!-- <ml-radio-group v-model="gender2" @change="change">
+			<ml-radio label="1"></ml-radio>
+			<ml-radio label="0"></ml-radio>
+		</ml-radio-group> -->
+		<button @click="d">1</button>
+		
+		
+		<ml-radio label="1" v-model="gender2" @change="change"></ml-radio>
+		<ml-radio label="0" v-model="gender2" @change="change"></ml-radio>
 	</div>
 </template>
 
@@ -18,37 +17,19 @@
 	export default{
 		data(){
 			return{
-				options: [{
-				          value: '选项1',
-				          label: '黄金糕'
-				        },
-						{
-				          value: '选项2',
-				          label: '双皮奶'
-				        }, {
-				          value: '选项3',
-				          label: '蚵仔煎'
-				        }, {
-				          value: '选项4',
-				          label: '龙须面'
-				        },
-						{
-				          value: '选项5',
-				          label: '北京烤鸭'
-				        }],
-				value: '',
+				value:false,
+				gender:1,
+				gender2:0
 			}
 		},
-		created() {
-			
-		},
 		methods:{
-			change(e){
-				// console.log(e)
-				// this.value = e.label
-				console.log(this.value)
+			input(e){
+				console.log(e)
 			},
-			alert(e){
+			d(e){
+				console.log(this.gender2)
+			},
+			change(e){
 				console.log(e)
 			}
 		}

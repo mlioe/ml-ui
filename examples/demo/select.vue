@@ -2,15 +2,15 @@
 	
 	<div>
 		<!-- 不可输入 -->
-		<!-- <ml-select v-model="value" @change="change" placeholder="请选择">
-			<ml-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" >
-			</ml-option>
-		</ml-select> -->
-		<!-- 可输入 -->
-		<ml-select v-model="value" @change="change" placeholder="请选择" readonly>
+		<ml-select v-model="value" @change="change" placeholder="请选择">
 			<ml-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" >
 			</ml-option>
 		</ml-select>
+		<!-- 可输入 -->
+		<!-- <ml-select v-model="value" @change="change" placeholder="请选择" readonly>
+			<ml-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" >
+			</ml-option>
+		</ml-select> -->
 	</div>
 </template>
 
