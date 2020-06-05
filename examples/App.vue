@@ -1,7 +1,7 @@
 <template>
 	
 	<div>
-		<ml-data-picker placeholder="选择日期时间" v-model="value" disabled></ml-data-picker>
+		<ml-data-picker placeholder="选择日期时间" v-model="value"></ml-data-picker>
 	</div>
 </template>
 

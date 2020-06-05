@@ -8,7 +8,11 @@
 		 :value="value"
 		 @input="handelInput"
 		 :readonly="readonly"
-		 :style="readonly ?'cursor: pointer':''"
+		 :class="[
+			 {'pointer':readonly && !disabled },
+			 {'dont-click':disabled}
+			 
+			]"
 		 >
 		 <span class="ml-input__suffix" v-if="showSuffix">
 			 <i class="icon-shibai" v-if="clearable && value" @click="clear"></i>
@@ -107,6 +111,7 @@
 	    }
 	  }
 	  .dont-click{cursor: not-allowed;}
+	  .pointer{cursor: pointer;}
 	}
 	
 	.ml-input--suffix {
