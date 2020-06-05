@@ -94,7 +94,6 @@
 				this.wrapperType = !this.wrapperType
 			},
 			dayClick(item){
-				console.log(item)
 				let month = item.month <= 9 ? '0'+item.month :item.month
 				let day = item.showDate <= 9 ? '0' + item.showDate:item.showDate
 				let value = item.year + '-'+month+'-'+day
@@ -103,6 +102,8 @@
 				this.display.day = day
 				this.selectDay = value
 				this.setWrapperType()
+				this.$emit('input',this.selectDay)
+				this.$emit('change',this.selectDay)
 			},
 			lastYear(){
 				// console.log('上一年')
@@ -167,6 +168,12 @@
 				return true
 			}
 		},
+		watch:{
+			value(e){
+				console.log(e)
+				this.calculationTime()
+			}
+		}
 	}
 </script>
 
