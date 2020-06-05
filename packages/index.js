@@ -14,11 +14,12 @@ import Toast from './toast/toast.vue'
 import ToastIndex from './toast/index.js'
 import Select from './select/select.vue'
 import Option from './select/option.vue'
+import DataPicker from './dataPicker/dataPicker.vue'
 Vue.use(ToastIndex)
 import './fonts/iconfont.css'
 
 const components = [
-  Button,ButtonGroup,Dialog,Input,Switch,Radio,RadioGroup,Checkbox,CheckboxGroup,Form,FormItem,Toast,Select,Option
+  Button,ButtonGroup,Dialog,Input,Switch,Radio,RadioGroup,Checkbox,CheckboxGroup,Form,FormItem,Toast,Select,Option,DataPicker
 ]
 
 const install = function (Vue) {
