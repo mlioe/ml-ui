@@ -1,6 +1,6 @@
 // function 
 
-function getMonthData(year,month){
+function getMonthData(year,month){//计算日历
 	var ret = [];
 	var year,month
 	if(!year || !month){
@@ -36,7 +36,8 @@ function getMonthData(year,month){
 		ret.push({
 			month:thisMonth,
 			date:date,
-			showDate:showDate
+			showDate:showDate,
+			year:year
 		})
 	}
 	return ret
@@ -45,5 +46,5 @@ function getMonthData(year,month){
 
 
 export default {
-	getMonthData
+	getMonthData,
 }

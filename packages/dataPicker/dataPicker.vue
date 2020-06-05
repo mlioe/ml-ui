@@ -1,7 +1,7 @@
 <template>
 	<div class="ml-datapicker-box" v-clickoutside="handleClickOutside">
 		<div @click="setWrapperType">
-			<ml-input class="ml-input" :readonly="!readonly" style="cursor: pointer;" :placeholder="placeholder" v-model="selectDay">
+			<ml-input class="ml-input" :readonly="!readonly" :disabled="disabled"  :placeholder="placeholder" v-model="selectDay">
 				
 			</ml-input>
 		</div>
@@ -14,7 +14,7 @@
 					<i class="icon-arrow-left top-iconHover"></i>
 				</div>
 				<div @click="lastMount"><i class="icon-arrow-left top-iconHover"></i></div>
-				<div>{{nowYear}}年{{nowMonth}}月</div>
+				<div>{{selectYearIndex}}年{{selectMonthIndex}}月</div>
 				<div @click="nextMount"><i class="icon-arrow-right top-iconHover"></i></div>
 				<div @click="nextYear">
 					<i class="icon-arrow-right top-iconHover"></i>
@@ -30,10 +30,14 @@
 					v-for="item in dataList" 
 					:key="item.date"
 					:style="item.month != nowMonth ? 'color:#c0c4cc':''"
-					:class="{'today':nowMonth == item.month && nowDay == item.showDate}"
+					:class="[
+						{'today':nowMonth == item.month && nowDay == item.showDate,},
+					]"
 					@click="dayClick(item)"
 				>
-					<span>{{item.showDate}}</span>
+					<span :class="item.year == display.year &&item.month == display.month && item.showDate == display.day ? 'active':''">
+						{{item.showDate}}
+					</span>
 				</div>
 			</div>
 		</div>
@@ -55,7 +59,11 @@
 			readonly:{
 				type:Boolean,
 				default:false
-			}
+			},
+			disabled:{
+				type:Boolean,
+				default:false
+			},
 		},
 		data(){
 			return{
@@ -64,7 +72,15 @@
 				nowYear:'',
 				nowDay:'',
 				selectDay:'',
-				wrapperType:false
+				wrapperType:false,
+				selectMonthIndex:null,
+				selectDayIndex:null,
+				selectYearIndex:null,
+				display: {
+				        year: null,
+				        month: null,
+				        day: null,
+				},
 			}
 		},
 		mounted(){
@@ -74,44 +90,83 @@
 				this.wrapperType = false
 			},
 			setWrapperType(){
+				if(this.disabled) return 
 				this.wrapperType = !this.wrapperType
 			},
 			dayClick(item){
+				console.log(item)
 				let month = item.month <= 9 ? '0'+item.month :item.month
 				let day = item.showDate <= 9 ? '0' + item.showDate:item.showDate
-				let value = this.nowYear + '-'+month+'-'+day
+				let value = item.year + '-'+month+'-'+day
+				this.display.year = item.year
+				this.display.month = month
+				this.display.day = day
 				this.selectDay = value
 				this.setWrapperType()
 			},
 			lastYear(){
 				// console.log('上一年')
-				this.nowYear -- 
-				this.dataList = utils.getMonthData(this.nowYear,this.nowMonth)
+				this.selectYearIndex -- 
+				this.dataList = utils.getMonthData(this.selectYearIndex,this.selectMonthIndex)
 			},
 			lastMount(){
 				// console.log('上一个月')
-				this.nowMonth --
-				this.dataList = utils.getMonthData(this.nowYear,this.nowMonth)
+				this.selectMonthIndex --
+				this.dataList = utils.getMonthData(this.selectYearIndex,this.selectMonthIndex)
 			},
 			nextMount(){
 				// console.log('下一个月')
-				this.nowMonth ++ 
-				this.dataList = utils.getMonthData(this.nowYear,this.nowMonth)
+				this.selectMonthIndex ++ 
+				this.dataList = utils.getMonthData(this.selectYearIndex,this.selectMonthIndex)
 			},
 			nextYear(){
 				// console.log('下一年')
-				this.nowYear ++ 
-				this.dataList = utils.getMonthData(this.nowYear,this.nowMonth)
+				this.selectYearIndex ++ 
+				this.dataList = utils.getMonthData(this.selectYearIndex,this.selectMonthIndex)
+			},
+			calculationTime(){
+				if(this.value != ''){
+					if(isNaN(Date.parse(this.value))){//判断是不是时间搓格式
+						this.selectDay = ''
+					}else{
+						if(typeof this.value == 'string'){
+							this.selectDay = this.value
+							this.display.year = this.selectDay.split('-')[0]
+							this.display.month = this.selectDay.split('-')[1]
+							this.display.day = this.selectDay.split('-')[2]
+						}else{
+							var today = this.value//获取当前年月
+							let day = today.getDay() <= 9 ? '0' + today.getDay() : today.getDay()
+							let month = today.getMonth() <= 9 ? '0' + (today.getMonth()-0+1) : today.getMonth()-0+1
+							let year = today.getFullYear() 
+							
+							this.selectDay = year + '-' + month + '-' + day
+							this.display.year = year
+							this.display.month = month
+							this.display.day = day
+						}
+					}
+				}
 			}
 		},
 		created() {
-			this.dataList = utils.getMonthData()
+			this.dataList = utils.getMonthData()//初始化当前日期
+			this.calculationTime()
 			var today = new Date()//获取当前年月
 			this.nowMonth = today.getMonth() + 1 //0-11，所以加1
 			this.nowYear = today.getFullYear()
 			this.nowDay = today.getDay()
-			
-		}
+			//存储当前年月日，用于日期切换
+			this.selectMonthIndex = this.nowMonth
+			this.selectDayIndex = this.selectDay
+			this.selectYearIndex = this.nowYear
+		},
+		computed:{
+			judge(e){
+				console.log(e)
+				return true
+			}
+		},
 	}
 </script>
 
@@ -119,6 +174,7 @@
 	.ml-datapicker-box{
 		width: 200px;
 		position: relative;
+		.stop{cursor: not-allowed;}
 	}
 	.ml-input{width: 100%;padding-right: 20px;}
 	.icon-arrow-up{position: absolute;right: 4px;top: 0;display: inline-block;height: 100%;line-height: 34px;transition: 0.2s;}
@@ -168,10 +224,9 @@
 					color: white;
 					background-color: #409EFF;
 				}
-				
+				.active{color: white;background-color: #409EFF;}
 			}
 			.today{color: #409EFF;}
-			.active{border: 1px solid #409EFF;color: white;background-color: #409EFF;border-radius: 100%;}
 		}
 		
 	}

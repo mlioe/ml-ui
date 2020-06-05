@@ -1,7 +1,7 @@
 <template>
 	
 	<div>
-		<ml-data-picker></ml-data-picker>
+		<ml-data-picker placeholder="选择日期时间" v-model="value" disabled></ml-data-picker>
 	</div>
 </template>
 
@@ -9,7 +9,8 @@
 	export default{
 		data(){
 			return{
-				
+				// value:new Date()
+				value:''
 			}
 		},
 		

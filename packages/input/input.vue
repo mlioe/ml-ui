@@ -106,8 +106,8 @@
 	      border-color: #409eff;
 	    }
 	  }
+	  .dont-click{cursor: not-allowed;}
 	}
-	
 	
 	.ml-input--suffix {
 	  .ml-input__inner {
