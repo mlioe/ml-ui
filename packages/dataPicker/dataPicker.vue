@@ -1,5 +1,5 @@
 <template>
-	<div class="ml-datapicker-box">
+	<div class="ml-datapicker-box" v-clickoutside="handleClickOutside">
 		<div @click="setWrapperType">
 			<ml-input class="ml-input" :readonly="!readonly" style="cursor: pointer;" :placeholder="placeholder" v-model="selectDay">
 				
@@ -41,8 +41,10 @@
 </template>
 
 <script>
+	import Clickoutside from '../utils/clickoutside.js'
 	import utils from './utils.js'
 	export default{
+		directives: { Clickoutside },
 		name:'mlDataPicker',
 		props:{
 			value:'',
@@ -66,14 +68,18 @@
 			}
 		},
 		mounted(){
-			console.log(this.$parent)
 		},
 		methods:{
+			handleClickOutside(){
+				this.wrapperType = false
+			},
 			setWrapperType(){
 				this.wrapperType = !this.wrapperType
 			},
 			dayClick(item){
-				let value = this.nowYear + '-'+item.month+'-'+item.showDate
+				let month = item.month <= 9 ? '0'+item.month :item.month
+				let day = item.showDate <= 9 ? '0' + item.showDate:item.showDate
+				let value = this.nowYear + '-'+month+'-'+day
 				this.selectDay = value
 				this.setWrapperType()
 			},
