@@ -14,7 +14,9 @@
 		},
 		methods:{
 			input(e){
-				console.log(e)
+				this.$toast({
+					message:JSON.stringify(e),
+				})
 			}
 		}
 	}
