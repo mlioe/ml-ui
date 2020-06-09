@@ -15,11 +15,12 @@ import ToastIndex from './toast/index.js'
 import Select from './select/select.vue'
 import Option from './select/option.vue'
 import DataPicker from './dataPicker/dataPicker.vue'
+import TimePicker from './timePicker/timePicker.vue'
 Vue.use(ToastIndex)
 import './fonts/iconfont.css'
 
 const components = [
-  Button,ButtonGroup,Dialog,Input,Switch,Radio,RadioGroup,Checkbox,CheckboxGroup,Form,FormItem,Toast,Select,Option,DataPicker
+  Button,ButtonGroup,Dialog,Input,Switch,Radio,RadioGroup,Checkbox,CheckboxGroup,Form,FormItem,Toast,Select,Option,DataPicker,TimePicker
 ]
 
 const install = function (Vue) {
