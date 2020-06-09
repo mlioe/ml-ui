@@ -1,10 +1,13 @@
 <template>
 	<div style="margin-top: 30px;" >
 		
-		<ml-radio-group v-model="gender2" @change="input">
-			<ml-radio label="1"></ml-radio>
-			<ml-radio label="0"></ml-radio>
-		</ml-radio-group>
+	
+		
+		<ml-time-picker v-model="value" :picker-options="{
+        start: '08:30',
+        step: '00:15',
+        end: '18:30',
+      }"></ml-time-picker>
 		
 		<!-- <ml-radio label="1" v-model="gender" @change="input"></ml-radio>
 		<ml-radio label="0" v-model="gender" @change="input"></ml-radio> -->
@@ -16,9 +19,8 @@
 	export default{
 		data(){
 			return{
-				value:false,
-				gender:0,
-				gender2:0
+				value:'2019-01-01',
+				
 			}
 		},
 		methods:{
