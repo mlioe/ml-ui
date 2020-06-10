@@ -164,13 +164,11 @@
 		},
 		computed:{
 			judge(e){
-				console.log(e)
 				return true
 			}
 		},
 		watch:{
 			value(e){
-				console.log(e)
 				this.calculationTime()
 			}
 		}

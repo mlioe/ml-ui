@@ -11,11 +11,22 @@
 		</div>
 		<div class="ml-time-wrapper" v-show="wrapperType">
 			<div class="ml-time-wrapper-main">
-				<div class="wrapper-hour">
-					
+				<div class="wrapper-hour main-box">
+					<li 
+						v-for="item in reage[0].arr" 
+						:key="item.id" 
+						:class="{'disabledColor':item.disabled}"
+					>
+						{{item.num}}
+					</li>
 				</div>
-				<div class="wrapper-minutes"></div>
-				<div class="wrapper-second"></div>
+				<div class="wrapper-minutes main-box">
+					<li v-for="item in reage[1].arr" :key="item.id"	:class="{'disabledColor':item.disabled}">{{item.num}}</li>
+				</div>
+				<div class="wrapper-second main-box">
+					<li v-for="item in reage[2].arr" :key="item.id"	:class="{'disabledColor':item.disabled}">{{item.num}}</li>
+				</div>
+				<div class="wrapper-border"></div>
 			</div>
 			<div class="ml-time-wrapper-footer">
 				<span>取消</span>
@@ -54,7 +65,7 @@
 			if(this.pickerOptions.start && this.pickerOptions.end){//
 				this.defaultArr()
 			}else if(this.pickerOptions.selectableRange){
-				console.log('---')
+				this.pickerArr()
 			}else{
 				console.error('请确认您使用timePicker组件时picker-options传送的格式是正确的')
 			}
@@ -64,12 +75,50 @@
 			return{
 				selectTime:'',
 				timeArr:[],
-				wrapperType:true
+				wrapperType:true,
+				reage: [
+				    { ref: 'reage1', arr: []},
+				    { ref: 'reage2', arr: []},
+				    { ref: 'reage3', arr: []},
+				],
 			}
 		},
 		methods:{
 			open(){
 				this.wrapperType = !this.wrapperType
+			},
+			pickerArr(){//初始化数组
+				let areaArr =  this.pickerOptions.selectableRange.split('-')
+				// console.log(areaArr)
+				let hourLen = 24
+				let minutesLen = 60
+				let secondLen = 60
+				let startTimeHour = areaArr[0].split(':')
+				let startEndHour = areaArr[1].split(':')
+				// console.log(startTimeHour,startEndHour)
+				// console.log(startEndHour[0] - startTimeHour[0])
+				let hourRange = []
+				for(var i=0;i<startEndHour[0] - startTimeHour[0] + 1;i++){
+					let newI = i+8 >= 10 ? String(i+8) : '0'+(i+8)
+					hourRange.push(newI)
+				}
+				for(var i=0;i<hourLen;i++){
+					let num =  i >= 10 ? i : '0' + i
+					let type = hourRange.includes(String(num)) //如果为true，说明在数组范围里，则disabled应该为false,让他能选择，反之为true
+					this.reage[0].arr.push({num:num,id:i,disabled:!type})
+				}
+				for(var i=0;i<minutesLen;i++){
+					let num =  i >= 10 ? i : '0' + i
+					this.reage[1].arr.push({num:num,id:i})
+					this.reage[2].arr.push({num:num,id:i})
+				}
+				for(var i= 0 ;i < 2 ; i++){
+					this.reage[0].arr.unshift({num:'--',disabled:true})
+					this.reage[1].arr.unshift({num:'--',disabled:true})
+					this.reage[2].arr.unshift({num:'--',disabled:true})
+				}
+				// this.reage[0].arr.unshift({num:''})
+				console.log(this.reage)
 			},
 			utilsTime(){
 				const reg = /^\s*([01]?\d|2[0-4]):?([0-5]\d)\s*$/;
@@ -168,10 +217,63 @@
 		        cursor: pointer;
 			}
 		}
+		.main-box{
+			scrollbar-color: #eeeeef transparent;
+			-ms-overflow-style: none; /* IE 10+ */
+		}
+		.main-box::-webkit-scrollbar{
+			width: 6px;
+		}
+		.main-box::-webkit-scrollbar-thumb{
+			border-radius: 6px;
+			background-color: #eeeeef;
+		}
+		.main-box::-moz-scrollbar{
+			width: 6px;
+		}
+		.main-box::-moz-scrollbar-thumb{
+			border-radius: 6px;
+			background-color: #eeeeef;
+		}
 		.ml-time-wrapper-main{
 			width: 200px;
 			height: 160px;
 			position: relative;
+			.wrapper-border{
+				position: absolute;
+				height: 32px;
+				// box-sizing: border-box;
+				border-top: 1px solid #e4e4e4;
+				border-bottom: 1px solid #e4e4e4;
+				width: 180px;
+				left: 10px;
+				top: 64px;
+				z-index: -1;
+			}
+			.wrapper-hour{
+				width: 33.33%;
+				height: 160px;
+				float: left;
+				overflow: auto;
+			}
+			.wrapper-minutes{
+				width: 33.33%;
+				height: 160px;
+				float: left;
+				overflow: auto;
+			}
+			.wrapper-second{
+				width: 33.33%;
+				height: 160px;
+				float: left;
+				overflow: auto;
+			}
+			li{
+				width: 100%;
+				text-align: center;
+				height: 32px;
+			}
+			.disabledColor{color: #dee3f4;}
 		}
 		.ml-time-wrapper-footer{
 			height: 40px;
