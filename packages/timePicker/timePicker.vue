@@ -11,7 +11,7 @@
 		</div>
 		<div class="ml-time-wrapper" v-show="wrapperType">
 			<div class="ml-time-wrapper-main">
-				<div class="wrapper-hour main-box">
+				<div class="wrapper-hour main-box" 	ref="reage1"  @scroll="scrollEvent1">
 					<li 
 						v-for="item in reage[0].arr" 
 						:key="item.id" 
@@ -20,10 +20,10 @@
 						{{item.num}}
 					</li>
 				</div>
-				<div class="wrapper-minutes main-box">
+				<div class="wrapper-minutes main-box" ref="reage2">
 					<li v-for="item in reage[1].arr" :key="item.id"	:class="{'disabledColor':item.disabled}">{{item.num}}</li>
 				</div>
-				<div class="wrapper-second main-box">
+				<div class="wrapper-second main-box" ref="reage3">
 					<li v-for="item in reage[2].arr" :key="item.id"	:class="{'disabledColor':item.disabled}">{{item.num}}</li>
 				</div>
 				<div class="wrapper-border"></div>
@@ -37,6 +37,16 @@
 </template>
 
 <script>
+	let _this = ''
+	function debounce(func, wait = 500) { //可以放入项目中的公共方法中进行调用（防抖）
+		let timeout;
+		return function(event) {
+			clearTimeout(timeout)
+			timeout = setTimeout(() => {
+				func.call(this, event)
+			}, wait)
+		}
+	}
 	import Clickoutside from '../utils/clickoutside.js'
 	export default{
 		name:'mlTimePicker',
@@ -61,6 +71,7 @@
 			}
 		},
 		created(){
+			_this = this
 			this.selectTime = this.value
 			if(this.pickerOptions.start && this.pickerOptions.end){//
 				this.defaultArr()
@@ -84,41 +95,77 @@
 			}
 		},
 		methods:{
+			scrollEvent1:debounce(function(e) {
+				let scrollIndex =  e.target.scrollTop/32
+				// console.log(scrollIndex)
+				// console.log(Math.round(scrollIndex))
+				_this.$refs.reage1.scrollTop = Math.round(scrollIndex)*32
+			}),
 			open(){
 				this.wrapperType = !this.wrapperType
 			},
 			pickerArr(){//初始化数组
 				let areaArr =  this.pickerOptions.selectableRange.split('-')
-				// console.log(areaArr)
 				let hourLen = 24
 				let minutesLen = 60
 				let secondLen = 60
-				let startTimeHour = areaArr[0].split(':')
-				let startEndHour = areaArr[1].split(':')
-				// console.log(startTimeHour,startEndHour)
-				// console.log(startEndHour[0] - startTimeHour[0])
+				let startTimeHour = areaArr[0].split(':')[0]
+				let startEndHour = areaArr[1].split(':')[0]
+				let startMinutes = areaArr[0].split(':')[1]
+				let startSecond = areaArr[0].split(':')[2]
 				let hourRange = []
-				for(var i=0;i<startEndHour[0] - startTimeHour[0] + 1;i++){
-					let newI = i+8 >= 10 ? String(i+8) : '0'+(i+8)
+				let minutesRange = []
+				let secondRange = []
+				let startScrollTopIndex = 0 //移动的下标
+				let startMinutesScrollTopIndex = 0//移动的分钟下标
+				let startSecondScrollTopIndex = 0//移动的秒数下标
+				for(var i=0;i<startEndHour - startTimeHour + 1;i++){//初始化要加高亮的小时
+					let newI = i+Number(startTimeHour) >= 10 ? String(i+Number(startTimeHour)) : '0'+(i+Number(startTimeHour))
 					hourRange.push(newI)
+				}
+				for(var i=0;i<60 - startMinutes;i++){//初始化要高亮的分钟数
+					let newI = String(i+Number(startMinutes)) >= 10 ? String(i+Number(startMinutes)) :'0'+String(i+Number(startMinutes))
+					minutesRange.push(newI)
+				}
+				for(var i=0;i<60-startSecond;i++){
+					let newI = String(i+Number(startSecond)) >= 10 ? String(i+Number(startSecond)) :'0'+String(i+Number(startSecond))
+					secondRange.push(newI)
 				}
 				for(var i=0;i<hourLen;i++){
 					let num =  i >= 10 ? i : '0' + i
 					let type = hourRange.includes(String(num)) //如果为true，说明在数组范围里，则disabled应该为false,让他能选择，反之为true
+					if(startTimeHour == String(num)){//获取数组传过来的第一个值
+						startScrollTopIndex = i
+					}
 					this.reage[0].arr.push({num:num,id:i,disabled:!type})
 				}
 				for(var i=0;i<minutesLen;i++){
 					let num =  i >= 10 ? i : '0' + i
-					this.reage[1].arr.push({num:num,id:i})
-					this.reage[2].arr.push({num:num,id:i})
+					let type = minutesRange.includes(String(num))
+					if(startMinutes == String(num)){
+						startMinutesScrollTopIndex = i
+					}
+					this.reage[1].arr.push({num:num,id:i,disabled:!type})
+				}
+				for(var i=0;i<secondLen;i++){
+					let num =  i >= 10 ? i : '0' + i
+					let type = secondRange.includes(String(num))
+					if(String(num) == startSecond.trim()){//外面传值时有可能会出现空格
+						startSecondScrollTopIndex = i
+					}
+					this.reage[2].arr.push({num:num,id:i,disabled:!type})
 				}
 				for(var i= 0 ;i < 2 ; i++){
 					this.reage[0].arr.unshift({num:'--',disabled:true})
 					this.reage[1].arr.unshift({num:'--',disabled:true})
 					this.reage[2].arr.unshift({num:'--',disabled:true})
 				}
-				// this.reage[0].arr.unshift({num:''})
-				console.log(this.reage)
+				this.$nextTick(()=>{
+					this.$refs.reage1.scrollTop = startScrollTopIndex*32
+					this.$refs.reage2.scrollTop = startMinutesScrollTopIndex*32
+					this.$refs.reage3.scrollTop = startSecondScrollTopIndex*32
+					
+				})
 			},
 			utilsTime(){
 				const reg = /^\s*([01]?\d|2[0-4]):?([0-5]\d)\s*$/;
