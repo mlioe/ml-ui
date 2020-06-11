@@ -9,7 +9,7 @@
 		<div class="ml-time-wrapper" v-show="wrapperType&&timeArr.length!=0">
 			<div class="ml-time-wrapper-list" @click="slectTime(item)" v-for="item in timeArr" :key="item">{{item}}</div>
 		</div>
-		<div class="ml-time-wrapper" v-show="wrapperType">
+		<div class="ml-time-wrapper" v-show="wrapperType&&selectTime2Type">
 			<div class="ml-time-wrapper-main">
 				<div class="wrapper-hour main-box" 	ref="reage1"  @scroll="scrollEvent1">
 					<li 
@@ -30,7 +30,7 @@
 			</div>
 			<div class="ml-time-wrapper-footer">
 				<span>取消</span>
-				<span>确认</span>
+				<span @click="btn">确认</span>
 			</div>
 		</div> 
 	</div>
@@ -74,10 +74,11 @@
 			_this = this
 			this.selectTime = this.value
 			if(this.pickerOptions.start && this.pickerOptions.end){//
+			console.log('--时间选择器1--')
 				this.defaultArr()
 			}else if(this.pickerOptions.selectableRange){
+				console.log('--时间选择器1--')
 				this.selectTime2Type = true
-				this.pickerArr()
 			}else{
 				console.error('请确认您使用timePicker组件时picker-options传送的格式是正确的')
 			}
@@ -105,15 +106,20 @@
 				startMinutes:"",
 				startSecond:'',
 				endMinutes:'',
-				endSecond:''
+				endSecond:'',
+				firstGo:true
 			}
 		},
 		methods:{
+			btn(){
+				this.$emit('input',this.selectTime)
+				this.wrapperType = false
+			},
 			scrollEvent1:debounce(function(e) {
-				if(!this.event1Type){//判断是不是第一次进入
-					this.event1Type = true
-					return
-				}
+				// if(!this.event1Type){//判断是不是第一次进入
+				// 	this.event1Type = true
+				// 	return
+				// }
 				let scrollIndex =  e.target.scrollTop/32 //获取滚动距离，因为每个时间高度都为32，除32后剩的倍数四舍五入就是要位移的距离
 				let obj = this.reage[0].arr[Math.round(scrollIndex)+2] //获取位移到的数组
 				this.startScrollTopIndex = Math.round(scrollIndex)+2
@@ -196,15 +202,64 @@
 				
 			}),
 			scrollEvent2:debounce(function(e){
-				if(!this.event2Type){
-					this.event2Type = true
-					return
-				}
+				// if(!this.event2Type){
+				// 	this.event2Type = true
+				// 	return
+				// }
 				let scrollIndex =  e.target.scrollTop/32
 				_this.$refs.reage2.scrollTop = Math.round(scrollIndex)*32
 				this.startMinutesScrollTopIndex = Math.round(scrollIndex)  + 2
 				if(this.reage[1].arr[this.startMinutesScrollTopIndex].disabled){
+					this.reage[2].arr.map(item=>{
+						item.disabled = true
+					})
 					return
+				}else{
+					if(this.reage[0].arr[this.startScrollTopIndex].num == this.startTimeHour){
+						let minutes = Math.round(scrollIndex) >= 10 ? String(Math.round(scrollIndex)) : '0' + Math.round(scrollIndex)
+						if(minutes == this.startMinutes){
+							let secondRange = []
+							for(var i=0;i<60-this.startSecond;i++){
+								let newI = String(i+Number(this.startSecond)) >= 10 ? String(i+Number(this.startSecond)) :'0'+String(i+Number(this.startSecond))
+								secondRange.push(newI)
+							}
+							for(var i=0;i<60;i++){
+								let num =  i >= 10 ? i : '0' + i
+								let type = secondRange.includes(String(num))
+								this.reage[2].arr[i+2].disabled = !type
+							}
+							this.$refs.reage3.scrollTop = Number(this.startSecond)*32
+						}else{
+							this.reage[2].arr.map((item,index)=>{
+								if(index != 0 && index != 1 && index != 62 &&index !=63){
+									item.disabled = false
+								}
+							})
+						}
+						
+					}else if(this.reage[0].arr[this.startScrollTopIndex].num == this.startEndHour.trim()){
+						let minutes = Math.round(scrollIndex) >= 10 ? String(Math.round(scrollIndex)) : '0' + Math.round(scrollIndex)
+						if(this.endMinutes == minutes){
+							let secondRange = []
+							for(var i=0;i<Number(this.endSecond)+1;i++){
+								let num =  i >= 10 ? String(i) : '0' + i
+								secondRange.push(num)
+							}
+							for(var i=0;i<60;i++){
+								let num =  i >= 10 ? String(i) : '0' + i
+								let type = secondRange.includes(String(num))
+								this.reage[2].arr[i+2].disabled = !type
+							}
+							this.$refs.reage3.scrollTop = 0
+						}else{
+							this.reage[2].arr.map((item,index)=>{
+								if(index != 0 && index != 1 && index != 62 &&index !=63){
+									item.disabled = false
+								}
+							})
+						}
+						
+					}
 				}
 				let hour = this.reage[0].arr[this.startScrollTopIndex].num
 				let minutes = this.reage[1].arr[Math.round(scrollIndex)+2].num
@@ -213,10 +268,10 @@
 				this.selectTime = hour +':'+ minutes+':'+second
 			}),
 			scrollEvent3:debounce(function(e){
-				if(!this.event3Type){
-					this.event3Type = true
-					return
-				}
+				// if(!this.event3Type){
+				// 	this.event3Type = true
+				// 	return
+				// }
 				let scrollIndex =  e.target.scrollTop/32
 				_this.$refs.reage3.scrollTop = Math.round(scrollIndex)*32
 				this.startSecondScrollTopIndex = Math.round(scrollIndex) + 2
@@ -229,6 +284,13 @@
 				this.selectTime = hour +':'+ minutes+':'+second
 			}),
 			open(){
+				if(this.selectTime2Type){
+					if(this.firstGo){
+						this.firstGo = false
+						this.pickerArr()
+					}
+				}
+				
 				this.wrapperType = !this.wrapperType
 			},
 			pickerArr(){//初始化数组
@@ -282,27 +344,30 @@
 					}
 					this.reage[1].arr.push({num:num,id:i,disabled:!type})
 				}
+				console.log(this.endMinutes)
 				for(var i=0;i<secondLen;i++){
+					
 					let num =  i >= 10 ? i : '0' + i
 					let type = secondRange.includes(String(num))
 					if(String(num) == startSecond.trim()){//外面传值时有可能会出现空格
 						startSecondScrollTopIndex  = i
 						this.startSecondScrollTopIndex = startSecondScrollTopIndex+2
 					}
-					this.reage[2].arr.push({num:num,id:i,disabled:!type})
+					this.reage[2].arr.push({num:num,id:i,disabled:false})
 				}
 				for(var i= 0 ;i < 2 ; i++){
 					this.reage[0].arr.unshift({num:'--',disabled:true})
 					this.reage[1].arr.unshift({num:'--',disabled:true})
 					this.reage[2].arr.unshift({num:'--',disabled:true})
+					this.reage[0].arr.push({num:'--',disabled:true})
+					this.reage[1].arr.push({num:'--',disabled:true})
+					this.reage[2].arr.push({num:'--',disabled:true})
 				}
-				setTimeout(()=>{
-					this.$nextTick(()=>{
-						this.$refs.reage1.scrollTop = startScrollTopIndex*32
-						this.$refs.reage2.scrollTop = startMinutesScrollTopIndex*32
-						this.$refs.reage3.scrollTop = startSecondScrollTopIndex*32
-					})
-				},200)
+				this.$nextTick(()=>{
+					this.$refs.reage1.scrollTop = startScrollTopIndex*32
+					this.$refs.reage2.scrollTop = startMinutesScrollTopIndex*32
+					this.$refs.reage3.scrollTop = startSecondScrollTopIndex*32
+				})
 				// console.log(this.reage)
 			},
 			utilsTime(){

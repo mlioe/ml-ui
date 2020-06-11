@@ -1,20 +1,21 @@
 <template>
-	<div style="margin-top: 30px;" >
+	<div style="margin-top: 30px;display: flex;align-items: center;" >
 		
 	
 		
-		<!-- <ml-time-picker v-model="value" placeholder="请选择时间" :picker-options="{
+		<ml-time-picker v-model="value" placeholder="请选择时间" :picker-options="{
         start: '08:00',
 		step:'00:30',
         end: '18:30',
-      }"></ml-time-picker> -->
+      }"></ml-time-picker>
 		
-		<br>
+		
 		
 		
 		<ml-time-picker v-model="value" placeholder="请选择时间" :picker-options="{
-		  selectableRange: '00:10:20 - 02:01:05'
-		}"></ml-time-picker>
+		  selectableRange: '00:09:20 - 02:01:05'
+		  
+		}" @input="input"></ml-time-picker>
 		
 		<!-- <button @click="aa"></button> -->
 		
