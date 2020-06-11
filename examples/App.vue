@@ -13,10 +13,10 @@
 		
 		
 		<ml-time-picker v-model="value" placeholder="请选择时间" :picker-options="{
-		  selectableRange: '10:10:09 - 20:30:00'
+		  selectableRange: '00:10:20 - 02:01:05'
 		}"></ml-time-picker>
 		
-		<button @click="aa"></button>
+		<!-- <button @click="aa"></button> -->
 		
 		<!-- <ml-radio label="1" v-model="gender" @change="input"></ml-radio>
 		<ml-radio label="0" v-model="gender" @change="input"></ml-radio> -->

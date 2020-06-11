@@ -20,10 +20,10 @@
 						{{item.num}}
 					</li>
 				</div>
-				<div class="wrapper-minutes main-box" ref="reage2">
+				<div class="wrapper-minutes main-box" ref="reage2"  @scroll="scrollEvent2" >
 					<li v-for="item in reage[1].arr" :key="item.id"	:class="{'disabledColor':item.disabled}">{{item.num}}</li>
 				</div>
-				<div class="wrapper-second main-box" ref="reage3">
+				<div class="wrapper-second main-box" ref="reage3" @scroll="scrollEvent3">
 					<li v-for="item in reage[2].arr" :key="item.id"	:class="{'disabledColor':item.disabled}">{{item.num}}</li>
 				</div>
 				<div class="wrapper-border"></div>
@@ -32,7 +32,7 @@
 				<span>取消</span>
 				<span>确认</span>
 			</div>
-		</div>
+		</div> 
 	</div>
 </template>
 
@@ -76,6 +76,7 @@
 			if(this.pickerOptions.start && this.pickerOptions.end){//
 				this.defaultArr()
 			}else if(this.pickerOptions.selectableRange){
+				this.selectTime2Type = true
 				this.pickerArr()
 			}else{
 				console.error('请确认您使用timePicker组件时picker-options传送的格式是正确的')
@@ -86,20 +87,146 @@
 			return{
 				selectTime:'',
 				timeArr:[],
-				wrapperType:true,
+				wrapperType:false,
 				reage: [
-				    { ref: 'reage1', arr: []},
-				    { ref: 'reage2', arr: []},
-				    { ref: 'reage3', arr: []},
+				    { ref: 'reage1', arr: [],index:0},
+				    { ref: 'reage2', arr: [],index:0},
+				    { ref: 'reage3', arr: [],index:0},
 				],
+				selectTime2Type:false,
+				event1Type:false,
+				event2Type:false,
+				event3Type:false,
+				startTimeHour:'',
+				startEndHour:'',
+				startScrollTopIndex:'',
+				startMinutesScrollTopIndex:'',
+				startSecondScrollTopIndex:'',
+				startMinutes:"",
+				startSecond:'',
+				endMinutes:'',
+				endSecond:''
 			}
 		},
 		methods:{
 			scrollEvent1:debounce(function(e) {
-				let scrollIndex =  e.target.scrollTop/32
-				// console.log(scrollIndex)
-				// console.log(Math.round(scrollIndex))
+				if(!this.event1Type){//判断是不是第一次进入
+					this.event1Type = true
+					return
+				}
+				let scrollIndex =  e.target.scrollTop/32 //获取滚动距离，因为每个时间高度都为32，除32后剩的倍数四舍五入就是要位移的距离
+				let obj = this.reage[0].arr[Math.round(scrollIndex)+2] //获取位移到的数组
+				this.startScrollTopIndex = Math.round(scrollIndex)+2
 				_this.$refs.reage1.scrollTop = Math.round(scrollIndex)*32
+				let timeHour = Math.round(scrollIndex) >= 10 ? Math.round(scrollIndex) : '0'+ Math.round(scrollIndex)
+				if(obj.disabled){
+				}else{
+					if(timeHour == this.startTimeHour){
+						let minutesRange = []
+						let secondRange = []
+						for(var i=0;i<60 - this.startMinutes;i++){//初始化要高亮的分钟数
+							let newI = String(i+Number(this.startMinutes)) >= 10 ? String(i+Number(this.startMinutes)) :'0'+String(i+Number(this.startMinutes))
+							minutesRange.push(newI)
+						}
+						for(var i=0;i<60-this.startSecond;i++){//初始化要高亮的秒数
+							let newI = String(i+Number(this.startSecond)) >= 10 ? String(i+Number(this.startSecond)) :'0'+String(i+Number(this.startSecond))
+							secondRange.push(newI)
+						}
+						for(var i=0;i<60;i++){
+							let num =  i >= 10 ? i : '0' + i
+							let type = minutesRange.includes(String(num))
+							this.reage[1].arr[i+2].disabled = !type
+							if(this.startMinutes == String(num)){
+								this.$refs.reage2.scrollTop = i*32
+							}
+						}
+						for(var i=0;i<60;i++){
+							let num =  i >= 10 ? i : '0' + i
+							let type = secondRange.includes(String(num))
+							this.reage[2].arr[i+2].disabled = !type
+							if(String(num) == this.startSecond.trim()){//外面传值时有可能会出现空格
+								this.$refs.reage3.scrollTop = i*32
+							}
+						}
+						this.selectTime = this.startTimeHour + ':' + this.startMinutes + ':' + this.startSecond
+					}else if(timeHour.trim() == this.startEndHour.trim()){
+						this.$refs.reage2.scrollTop = 0
+						this.$refs.reage3.scrollTop = 0
+						let minutesRange = []
+						let secondRange = []
+						for(var i=0;i<Number(this.endMinutes)+1;i++){
+							let num =  i >= 10 ? String(i) : '0' + i
+							minutesRange.push(num)
+						}
+						for(var i=0;i<60;i++){
+							let num =  i >= 10 ? String(i) : '0' + i
+							let type = minutesRange.includes(String(num))
+							this.reage[1].arr[i+2].disabled = !type
+						}
+						for(var i=0;i<Number(this.endSecond)+1;i++){
+							let num =  i >= 10 ? String(i) : '0' + i
+							secondRange.push(num)
+						}
+						for(var i=0;i<60;i++){
+							let num =  i >= 10 ? String(i) : '0' + i
+							let type = secondRange.includes(String(num))
+							this.reage[2].arr[i+2].disabled = !type
+						}
+						this.selectTime = this.startEndHour + ':00:00'
+					}else{
+						this.$refs.reage2.scrollTop = 0
+						this.$refs.reage3.scrollTop = 0
+						this.startMinutesScrollTopIndex = 2
+						this.startSecondScrollTopIndex = 2
+						this.reage[1].arr.map((item,index)=>{
+							if(index!=0 && index!=1){
+								item.disabled = false
+							}
+						})
+						this.reage[2].arr.map((item,index)=>{
+							if(index!=0 && index!=1){
+								item.disabled = false
+							}
+						})
+						let minutes = this.reage[1].arr[this.startMinutesScrollTopIndex]
+						let second = this.reage[2].arr[this.startMinutesScrollTopIndex]
+						this.selectTime = this.reage[0].arr[Math.round(scrollIndex)+2].num + `:${minutes.num}:${second.num}`
+					}
+				}
+				
+			}),
+			scrollEvent2:debounce(function(e){
+				if(!this.event2Type){
+					this.event2Type = true
+					return
+				}
+				let scrollIndex =  e.target.scrollTop/32
+				_this.$refs.reage2.scrollTop = Math.round(scrollIndex)*32
+				this.startMinutesScrollTopIndex = Math.round(scrollIndex)  + 2
+				if(this.reage[1].arr[this.startMinutesScrollTopIndex].disabled){
+					return
+				}
+				let hour = this.reage[0].arr[this.startScrollTopIndex].num
+				let minutes = this.reage[1].arr[Math.round(scrollIndex)+2].num
+				let second = this.reage[2].arr[this.startSecondScrollTopIndex].num
+				
+				this.selectTime = hour +':'+ minutes+':'+second
+			}),
+			scrollEvent3:debounce(function(e){
+				if(!this.event3Type){
+					this.event3Type = true
+					return
+				}
+				let scrollIndex =  e.target.scrollTop/32
+				_this.$refs.reage3.scrollTop = Math.round(scrollIndex)*32
+				this.startSecondScrollTopIndex = Math.round(scrollIndex) + 2
+				if(this.reage[2].arr[this.startSecondScrollTopIndex].disabled){
+					return
+				}
+				let hour = this.reage[0].arr[this.startScrollTopIndex].num
+				let minutes = this.reage[1].arr[this.startMinutesScrollTopIndex].num
+				let second = this.reage[2].arr[Math.round(scrollIndex)+2].num
+				this.selectTime = hour +':'+ minutes+':'+second
 			}),
 			open(){
 				this.wrapperType = !this.wrapperType
@@ -111,14 +238,20 @@
 				let secondLen = 60
 				let startTimeHour = areaArr[0].split(':')[0]
 				let startEndHour = areaArr[1].split(':')[0]
+				this.startTimeHour = startTimeHour
+				this.startEndHour = startEndHour
 				let startMinutes = areaArr[0].split(':')[1]
 				let startSecond = areaArr[0].split(':')[2]
+				this.startMinutes = startMinutes
+				this.startSecond = startSecond
 				let hourRange = []
 				let minutesRange = []
 				let secondRange = []
 				let startScrollTopIndex = 0 //移动的下标
 				let startMinutesScrollTopIndex = 0//移动的分钟下标
 				let startSecondScrollTopIndex = 0//移动的秒数下标
+				this.endMinutes = areaArr[1].split(':')[1]
+				this.endSecond = areaArr[1].split(':')[2]
 				for(var i=0;i<startEndHour - startTimeHour + 1;i++){//初始化要加高亮的小时
 					let newI = i+Number(startTimeHour) >= 10 ? String(i+Number(startTimeHour)) : '0'+(i+Number(startTimeHour))
 					hourRange.push(newI)
@@ -127,7 +260,7 @@
 					let newI = String(i+Number(startMinutes)) >= 10 ? String(i+Number(startMinutes)) :'0'+String(i+Number(startMinutes))
 					minutesRange.push(newI)
 				}
-				for(var i=0;i<60-startSecond;i++){
+				for(var i=0;i<60-startSecond;i++){//初始化要高亮的秒数
 					let newI = String(i+Number(startSecond)) >= 10 ? String(i+Number(startSecond)) :'0'+String(i+Number(startSecond))
 					secondRange.push(newI)
 				}
@@ -136,6 +269,7 @@
 					let type = hourRange.includes(String(num)) //如果为true，说明在数组范围里，则disabled应该为false,让他能选择，反之为true
 					if(startTimeHour == String(num)){//获取数组传过来的第一个值
 						startScrollTopIndex = i
+						this.startScrollTopIndex = startScrollTopIndex+2
 					}
 					this.reage[0].arr.push({num:num,id:i,disabled:!type})
 				}
@@ -144,6 +278,7 @@
 					let type = minutesRange.includes(String(num))
 					if(startMinutes == String(num)){
 						startMinutesScrollTopIndex = i
+						this.startMinutesScrollTopIndex = startMinutesScrollTopIndex+2
 					}
 					this.reage[1].arr.push({num:num,id:i,disabled:!type})
 				}
@@ -151,7 +286,8 @@
 					let num =  i >= 10 ? i : '0' + i
 					let type = secondRange.includes(String(num))
 					if(String(num) == startSecond.trim()){//外面传值时有可能会出现空格
-						startSecondScrollTopIndex = i
+						startSecondScrollTopIndex  = i
+						this.startSecondScrollTopIndex = startSecondScrollTopIndex+2
 					}
 					this.reage[2].arr.push({num:num,id:i,disabled:!type})
 				}
@@ -160,12 +296,14 @@
 					this.reage[1].arr.unshift({num:'--',disabled:true})
 					this.reage[2].arr.unshift({num:'--',disabled:true})
 				}
-				this.$nextTick(()=>{
-					this.$refs.reage1.scrollTop = startScrollTopIndex*32
-					this.$refs.reage2.scrollTop = startMinutesScrollTopIndex*32
-					this.$refs.reage3.scrollTop = startSecondScrollTopIndex*32
-					
-				})
+				setTimeout(()=>{
+					this.$nextTick(()=>{
+						this.$refs.reage1.scrollTop = startScrollTopIndex*32
+						this.$refs.reage2.scrollTop = startMinutesScrollTopIndex*32
+						this.$refs.reage3.scrollTop = startSecondScrollTopIndex*32
+					})
+				},200)
+				// console.log(this.reage)
 			},
 			utilsTime(){
 				const reg = /^\s*([01]?\d|2[0-4]):?([0-5]\d)\s*$/;
@@ -211,7 +349,7 @@
 				min =  min >= 10 ? min : '0' + min
 			    return houst + ':' + min
 			},
-			slectTime(item){
+			slectTimeClick(item){
 				this.selectTime = item
 				this.$emit('input', item)
 				this.wrapperType = !this.wrapperType
@@ -319,14 +457,21 @@
 				width: 100%;
 				text-align: center;
 				height: 32px;
+				cursor: pointer;
 			}
-			.disabledColor{color: #dee3f4;}
+			.disabledColor{
+				color: #dee3f4;
+				&:hover{
+					cursor: not-allowed;
+				}
+			}
 		}
 		.ml-time-wrapper-footer{
 			height: 40px;
 			border-top: 1px solid #e4e4e4;
 			box-sizing: border-box;
 			text-align: right;
+			overflow: hidden;
 			line-height: 40px;
 			span{margin: 0 10px;cursor: pointer;}
 			span:nth-of-type(2){color: #409EFF;}
