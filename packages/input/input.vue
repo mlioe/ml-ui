@@ -121,7 +121,7 @@
 	  .ml-input__suffix {
 	    position: absolute;
 	    height: 100%;
-	    right: 10px;
+	    right: 30px;
 	    top: 0;
 	    line-height: 34px;
 	    text-align: center;

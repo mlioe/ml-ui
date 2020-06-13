@@ -1,17 +1,7 @@
 <template>
 	<div>
-		<ml-form :model="model" label-width="80px">
-			<ml-form-item label="用户名">
-				<ml-input placeholder="请输入名字" style="width: 200px;" v-model="name"></ml-input>
-			</ml-form-item>
-			<ml-form-item label="显示资料">
-				<ml-switch v-model="value" :value.sync="value"></ml-switch>
-			</ml-form-item>
-
-			<ml-form-item>
-				<ml-button type="primary" @click="go">立即创建</ml-button>
-			</ml-form-item>
-		</ml-form>
+		<ml-input v-model="value" placeholder="请输入内容" type="text" name="inp" clearable style="width: 200px;"></ml-input>
+		<ml-input v-model="value" placeholder="请输入内容" type="password" name="inp"  show-password ></ml-input>
 	</div>
 </template>
 
@@ -19,19 +9,14 @@
 	export default {
 		data() {
 			return {
-				model: {
-					gender: 0,
-				},
-				value: false,
+				
+				value: 1,
 				name: ''
 			}
 		},
 		methods: {
 			go() {
-				console.log(this.value, this.name)
-				this.$toast({
-					message: this.value+'--'+this.name,
-				})
+				
 			}
 		}
 	}
