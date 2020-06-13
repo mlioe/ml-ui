@@ -1,5 +1,5 @@
 <template>
-	<div class="ml-datapicker-box">
+	<div class="ml-datapicker-box"  v-clickoutside="handleClickOutside">
 		<div @click="open">
 			<ml-input class="ml-input" :readonly="!readonly" :disabled="disabled"  :placeholder="placeholder" v-model="selectTime">
 				
@@ -74,10 +74,10 @@
 			_this = this
 			this.selectTime = this.value
 			if(this.pickerOptions.start && this.pickerOptions.end){//
-			console.log('--时间选择器1--')
+			// console.log('--时间选择器1--')
 				this.defaultArr()
 			}else if(this.pickerOptions.selectableRange){
-				console.log('--时间选择器1--')
+				// console.log('--时间选择器1--')
 				this.selectTime2Type = true
 			}else{
 				console.error('请确认您使用timePicker组件时picker-options传送的格式是正确的')
@@ -111,6 +111,14 @@
 			}
 		},
 		methods:{
+			handleClickOutside(){
+				this.wrapperType = false
+			},
+			slectTime(item){
+				this.$emit('input',item)
+				this.wrapperType = false
+				this.selectTime = item
+			},
 			btn(){
 				this.$emit('input',this.selectTime)
 				this.wrapperType = false
@@ -344,7 +352,7 @@
 					}
 					this.reage[1].arr.push({num:num,id:i,disabled:!type})
 				}
-				console.log(this.endMinutes)
+				// console.log(this.endMinutes)
 				for(var i=0;i<secondLen;i++){
 					
 					let num =  i >= 10 ? i : '0' + i

@@ -1,44 +1,37 @@
 <template>
-	<div style="margin-top: 30px;display: flex;align-items: center;" >
-		
-	
-		
-		<ml-time-picker v-model="value" placeholder="请选择时间" :picker-options="{
-        start: '08:00',
-		step:'00:30',
-        end: '18:30',
-      }"></ml-time-picker>
-		
-		
-		
-		
-		<ml-time-picker v-model="value" placeholder="请选择时间" :picker-options="{
-		  selectableRange: '00:09:20 - 02:01:05'
-		  
-		}" @input="input"></ml-time-picker>
-		
-		<!-- <button @click="aa"></button> -->
-		
-		<!-- <ml-radio label="1" v-model="gender" @change="input"></ml-radio>
-		<ml-radio label="0" v-model="gender" @change="input"></ml-radio> -->
-		
+	<div>
+		<ml-form :model="model" label-width="80px">
+			<ml-form-item label="用户名">
+				<ml-input placeholder="请输入名字" style="width: 200px;" v-model="name"></ml-input>
+			</ml-form-item>
+			<ml-form-item label="显示资料">
+				<ml-switch v-model="value" :value.sync="value"></ml-switch>
+			</ml-form-item>
+
+			<ml-form-item>
+				<ml-button type="primary" @click="go">立即创建</ml-button>
+			</ml-form-item>
+		</ml-form>
 	</div>
 </template>
 
 <script>
-	export default{
-		data(){
-			return{
-				value:'',
-				
+	export default {
+		data() {
+			return {
+				model: {
+					gender: 0,
+				},
+				value: false,
+				name: ''
 			}
 		},
-		methods:{
-			input(e){
-				console.log(e)
-			},
-			aa(){
-				console.log(this.value)
+		methods: {
+			go() {
+				console.log(this.value, this.name)
+				this.$toast({
+					message: this.value+'--'+this.name,
+				})
 			}
 		}
 	}
