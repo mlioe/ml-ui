@@ -79,11 +79,11 @@
 					this.$emit('update:visible',false)
 				},this.duration)
 			},
-			 close() {
+			close() {
 			      this.$el.remove()
 			      //销毁
 			      this.$destroy()
-			    },
+			},
 		},
 		watch:{
 			visible(){

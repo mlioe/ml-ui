@@ -10,7 +10,9 @@ export default{
 				currentToast.close()
 			}
 			currentToast = createToast({
-				Vue,message, onClose: () => {
+				Vue,
+				message, 
+				onClose: () => {
 				  currentToast = null
 				}
 			})
@@ -18,10 +20,11 @@ export default{
 	}
 }
 
-function createToast({ Vue, message, propsData, onClose }) {
+function createToast({ Vue, message, onClose }) {
+	//Vue传进来调用extend方法
   let Constructor = Vue.extend(Toast);
   //实例化构造器tosat对象
-  let toast = new Constructor({  });
+  let toast = new Constructor({});
   //添加
   toast.$mount();
   //注册事件
@@ -36,11 +39,6 @@ function createToast({ Vue, message, propsData, onClose }) {
   }
   //提示组件位置
   toast.position = toastMessage.position
-
-  document.body.appendChild(toast.$el)
-  
-  //组件props的值
-  //组件出现
   toast.visible = true
   //设置组件的样式
   if(toastMessage.type == 'info'){
@@ -62,8 +60,14 @@ function createToast({ Vue, message, propsData, onClose }) {
   //组件的值
   toast.message = toastMessage.message
   //默认3秒，关闭组件
+  
+  
+  document.body.appendChild(toast.$el)
   setTimeout(()=>{
-	  toast.visible = false
+	toast.$el.remove()
   },toastMessage.duration)
   return toast;
+  //组件props的值
+  //组件出现
+  
 }
