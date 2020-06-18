@@ -163,7 +163,8 @@
 							}
 						}
 						this.selectTime = this.startTimeHour + ':' + this.startMinutes + ':' + this.startSecond
-					}else if(timeHour.trim() == this.startEndHour.trim()){
+					}else if(timeHour == this.startEndHour.trim()){
+						console.log('--滑到最后一个--')
 						this.$refs.reage2.scrollTop = 0
 						this.$refs.reage3.scrollTop = 0
 						let minutesRange = []
