@@ -64,7 +64,10 @@ function createToast({ Vue, message, onClose }) {
   
   document.body.appendChild(toast.$el)
   setTimeout(()=>{
-	toast.$el.remove()
+  	  toast.visible = false
+	  setTimeout(()=>{
+		  toast.$el.remove()
+	  },200)
   },toastMessage.duration)
   return toast;
   //组件props的值
